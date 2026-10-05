@@ -1,3 +1,4 @@
+
 <!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>أستاذي DZ</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script><style>
@@ -128,7 +129,19 @@ async function memGen(blank){const c=cl($('#mc').value),m={id:id(),cid:c.id,leve
 if(!m.topic){alert('اكتب عنوان الدرس');return}
 if(!blank){let sm=null;try{sm=await window.claude?.use('sample')}catch(e){}if(!sm&&!(user&&sb)){alert('التوليد غير متاح هنا، يمكنك إنشاء مذكرة فارغة');return}
 const b=$('#mg');b.textContent='جارٍ التوليد...';b.disabled=true;
-try{const r=await aiJson(sm,`أنت أستاذ ${m.subject} جزائري خبير بمناهج الجيل الثاني. أنشئ مذكرة تربوية للمستوى: ${m.level} (${m.subject})، الميدان: ${m.field}، المقطع: ${m.seg}، المحتوى المعرفي: ${m.topic}، الزمن: ${m.dur}. أعد JSON فقط بهذا الشكل: {"comp":["3 مركبات كفاءة"],"means":["الوسائل"],"rows":[{"stage":"الانطلاق","text":"الوضعية الانطلاقية...","eval":"مؤشر التقويم (تشخيصي)","time":"5 د"},{"stage":"بناء التعلمات","text":"..."},{"stage":"استثمار المكتسبات","text":"..."},{"stage":"الختام","text":"..."}]}. في بناء التعلمات: الوضعية الجزئية الأولى (مثال أو نشاط) ثم أسئلة مرقمة مع أجوبتها (س1/ج)، فالاستنتاج، ثم الوضعية الجزئية الثانية (تدريبات)، وتكليف منزلي، وبما يناسب طبيعة المادة. في الانطلاق: تهيئة تنتهي بسؤال يقود لعنوان الدرس، وتقويمها تشخيصي. في بناء التعلمات: الوضعية الجزئية الأولى (المثال) بقراءة نموذجية ثم أسئلة مرقمة (1- ... ج: ...) ثم الاستنتاج، فتدريبات وإعراب نموذجي إن لزم، والتقويم مرحلي بمؤشرات مرقمة (1- يدوّن... 2- يقرأ...). الوضعية الجزئية الثانية: تكليف منزلي وفوائد. الختام: تقويم ختامي. الأهداف (comp) أفعال سلوكية مثل يتعرف ويميز ويعرب. السندات (means): الكتاب المقرر، مخطط التعلم السنوي، الدليل المنهجي، السبورة. حقل time أرقام دقائق فقط. استعمل \\n للأسطر، وبلغة سليمة ومصطلحات المادة.`);
+try{const r=await aiJson(sm,`أنت أستاذ ${m.subject} جزائري خبير بمناهج الجيل الثاني، تكتب مذكرة تربوية جاهزة للاستعمال الصفي. المستوى: ${m.level}. الميدان: ${m.field}. المقطع التعلمي: ${m.seg||'غير محدد'}. المحتوى المعرفي: ${m.topic}. زمن الإنجاز: ${m.dur}.
+أعد JSON فقط بلا أي نص خارجه: {"comp":[],"means":[],"rows":[{"stage":"","text":"","eval":"","time":""}]}.
+القواعد:
+1) comp: ثلاثة إلى أربعة أهداف تعلمية سلوكية قابلة للقياس، كل هدف يبدأ بفعل مضارع (يتعرف، يميز، يعرب، يوظف...).
+2) means: الكتاب المدرسي، مخطط التعلم السنوي، الدليل المنهجي، السبورة. لا تخترع أرقام صفحات.
+3) rows أربعة عناصر بهذا الترتيب وبهذه الأسماء: "الانطلاق" ثم "بناء التعلمات" ثم "استثمار المكتسبات" ثم "الختام".
+- الانطلاق: تبدأ بـ "أهيّئ:" وضعية انطلاقية قصيرة واقعية تنتهي بسؤال يقود المتعلمين إلى موضوع الدرس. التقويم: "تشخيصي: يدرك أن ...".
+- بناء التعلمات: "الوضعية الجزئية الأولى" ثم أمثلة أو نص قصير حقيقي صحيح لغويًا ومناسب للمستوى (مع شواهد من القرآن الكريم أو الشعر عند الاقتضاء)، ثم خطوات مرقمة (1- قراءة نموذجية من الأستاذ 2- قراءة المتعلمين 3- مناقشة)، ثم أسئلة مرقمة بصيغة "س1: ... ج: ..." بإجابات دقيقة، ثم "الاستنتاج 1:" بصياغة موجزة. كرر ذلك لكل فكرة، ثم "إعراب نموذجي" إن كان الدرس نحويًا. التقويم مرحلي بمؤشرات مرقمة (1- يدوّن المتعلم ... 2- يقرأ ... 3- يناقش ...).
+- استثمار المكتسبات: "الوضعية الجزئية الثانية" بتدريبات متنوعة بأسئلة وأجوبة، ثم "تكليف منزلي" بتمرينين متدرجين، ثم "فوائد" قصيرة.
+- الختام: "تقويم ختامي" بسؤال تطبيقي أو فقرة قصيرة، تقويمها "ختامي: يطبّق ويرسّخ"، وتنتهي بعبارة "بالتوفيق والسداد".
+4) time: دقائق بأرقام فقط، ومجموعها يساوي زمن الإنجاز.
+5) تحقق من صحة كل إعراب وقاعدة ومثال قبل كتابته، ولا تضع معلومة غير مؤكدة.
+6) استعمل \\n لفصل الأسطر داخل النصوص، وعربية فصحى سليمة.`);
 m.comp=r.comp||[];m.means=r.means||m.means;if(r.rows?.length)m.rows=r.rows.map(x=>({stage:x.stage||'',text:x.text||'',eval:x.eval||'',time:x.time||''}))}catch(e){alert(e.message=='limit'?'استنفدت حصتك الشهرية من المذكرات':'تعذر التوليد: '+e.message);b.textContent='✨ توليد المذكرة بالذكاء الاصطناعي';b.disabled=false;return}}
 db.mem.push(m);sel.mid=m.id;save();go()}
 function pho(f){if(!f)return;const R=new FileReader();R.onload=()=>{const i=new Image();i.onload=()=>{const c=document.createElement('canvas'),z=Math.min(1,256/Math.max(i.width,i.height));c.width=i.width*z;c.height=i.height*z;c.getContext('2d').drawImage(i,0,0,c.width,c.height);db.photo=c.toDataURL('image/jpeg',.85);save();go()};i.src=R.result};R.readAsDataURL(f)}
